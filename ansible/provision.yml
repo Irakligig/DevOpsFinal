@@ -1,0 +1,57 @@
+---
+- name: Provision DevOps Final environment
+  hosts: localhost
+  connection: local
+  vars:
+    project_root: "{{ playbook_dir }}/.."
+  tasks:
+    - name: Create log directory
+      file:
+        path: "{{ project_root }}/logs"
+        state: directory
+        mode: "0755"
+
+    - name: Create blue deployment directory
+      file:
+        path: "{{ project_root }}/data/blue"
+        state: directory
+        mode: "0755"
+
+    - name: Create green deployment directory
+      file:
+        path: "{{ project_root }}/data/green"
+        state: directory
+        mode: "0755"
+
+    - name: Copy .env from template if missing
+      copy:
+        src: "{{ project_root }}/.env.example"
+        dest: "{{ project_root }}/.env"
+        force: false
+        mode: "0644"
+
+    - name: Install Node.js API dependencies
+      command: npm ci
+      args:
+        chdir: "{{ project_root }}/api"
+
+    - name: Make scripts executable
+      file:
+        path: "{{ item }}"
+        mode: "0755"
+      loop:
+        - "{{ project_root }}/scripts/setup.sh"
+        - "{{ project_root }}/scripts/deploy.sh"
+        - "{{ project_root }}/scripts/rollback.sh"
+        - "{{ project_root }}/scripts/healthcheck.sh"
+        - "{{ project_root }}/scripts/validate-env.sh"
+        - "{{ project_root }}/scripts/post-deploy-check.sh"
+
+    - name: Start Docker Compose stack
+      command: docker compose up --build -d
+      args:
+        chdir: "{{ project_root }}"
+
+    - name: Confirm setup
+      debug:
+        msg: "Environment provisioned successfully"

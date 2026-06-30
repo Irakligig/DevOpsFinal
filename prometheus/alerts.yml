@@ -1,0 +1,29 @@
+groups:
+  - name: app-alerts
+    rules:
+      - alert: HighErrorRate
+        expr: rate(app_errors_total[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate on Flask app"
+          description: "Error rate exceeds 0.1/s for more than 2 minutes."
+
+      - alert: FlaskAppDown
+        expr: up{job="flask-app"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Flask app is down"
+          description: "Prometheus cannot scrape the Flask app target."
+
+      - alert: HighRequestRate
+        expr: rate(app_requests_total[1m]) > 10
+        for: 5m
+        labels:
+          severity: info
+        annotations:
+          summary: "Unusually high request rate"
+          description: "Request rate exceeds 10/s — possible traffic spike."
