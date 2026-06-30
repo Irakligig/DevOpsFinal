@@ -2,6 +2,10 @@ FROM node:20-slim
 
 WORKDIR /app
 
+RUN apt-get update && \
+    apt-get upgrade -y --no-install-recommends && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN groupadd -r appgroup && useradd -r -g appgroup appuser
 
 COPY package*.json ./
