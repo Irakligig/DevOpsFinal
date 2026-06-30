@@ -25,7 +25,7 @@ if (Get-Command npm -ErrorAction SilentlyContinue) {
 # Install Python dependencies
 if (Get-Command pip -ErrorAction SilentlyContinue) {
     Write-Host "==> Installing Python app dependencies..."
-    pip install -r app/requirements.txt --quiet
+    pip install -r app/requirements-dev.txt --quiet
 }
 
 # Build and start Docker Compose stack

@@ -28,7 +28,7 @@ fi
 # Install Python dependencies (for local testing outside Docker)
 if command -v pip &>/dev/null; then
   echo "==> Installing Python app dependencies..."
-  pip install -r app/requirements.txt --quiet
+  pip install -r app/requirements-dev.txt --quiet
 fi
 
 # Build and start all Docker services
