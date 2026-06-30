@@ -150,23 +150,23 @@ jobs:
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: "devops-final-app:${{ github.sha }}"
+          scan-type: image
           scanners: vuln
+          vuln-type: library
           severity: "CRITICAL,HIGH"
           ignore-unfixed: true
           exit-code: "1"
-          trivyignores: .trivyignore
-          trivy-args: --pkg-types library
 
       - name: Scan API image with Trivy
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: "devops-final-api:${{ github.sha }}"
+          scan-type: image
           scanners: vuln
+          vuln-type: library
           severity: "CRITICAL,HIGH"
           ignore-unfixed: true
           exit-code: "1"
-          trivyignores: .trivyignore
-          trivy-args: --pkg-types library
 
   # ── Deploy (main branch only) ─────────────────────────────────────
   deploy:
