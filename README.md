@@ -306,16 +306,49 @@ devops-final/
 
 ## Screenshots
 
-Add screenshots to the `screenshots/` folder demonstrating:
+Evidence from local runs and CI. Images live in [`screenshots/`](screenshots/) and render on GitHub when committed to the repo.
 
-- CI/CD pipeline with all security stages passing
-- Grafana dashboard with live metrics
-- Prometheus targets showing UP status
-- Docker Compose services running
-- Blue-green deployment and rollback
-- Health check and validation output
+### CI/CD Pipeline
 
-See [screenshots/README.md](screenshots/README.md) for the full list.
+GitHub Actions — all security and build stages passing:
+
+![CI/CD pipeline with all security stages passing](screenshots/ci-pipeline.png)
+
+### Docker Services Running
+
+All Compose services healthy (`docker compose ps`):
+
+![Docker Compose services healthy](screenshots/docker-services.png)
+
+### Environment Validation
+
+Automated health checks (`.\scripts\validate-env.ps1` / `bash scripts/validate-env.sh`):
+
+![Environment validation output](screenshots/env-validation.png)
+
+### Prometheus Targets
+
+Flask app scrape target UP at http://localhost:9090/targets:
+
+![Prometheus flask-app target UP](screenshots/prometheus-targets.png)
+
+### Grafana Dashboard
+
+Live app metrics at http://localhost:3001:
+
+![Grafana app metrics dashboard](screenshots/grafana-dashboard.png)
+
+### Grafana Logs (Loki)
+
+Log exploration with LogQL `{job="flask-app"}`:
+
+![Grafana Explore with Loki logs](screenshots/grafana-logs.png)
+
+### Health Check
+
+Post-deploy health monitoring script output:
+
+![Health check script output](screenshots/healthcheck.png)
 
 ---
 
