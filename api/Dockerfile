@@ -1,16 +1,19 @@
 FROM node:20-slim AS build
 
 WORKDIR /app
+USER node
 
-COPY package*.json ./
+COPY --chown=node:node package*.json ./
 RUN npm ci --omit=dev
 
-COPY app.js ./
+COPY --chown=node:node app.js ./
 
 FROM gcr.io/distroless/nodejs20-debian12:nonroot
 
 WORKDIR /app
 COPY --from=build --chown=nonroot:nonroot /app /app
+
+USER nonroot:nonroot
 
 EXPOSE 3000
 
