@@ -1,12 +1,11 @@
 FROM node:20-slim AS build
 
 WORKDIR /app
-USER node
 
-COPY --chown=node:node package*.json ./
+COPY package*.json ./
 RUN npm ci --omit=dev
 
-COPY --chown=node:node app.js ./
+COPY app.js ./
 
 FROM gcr.io/distroless/nodejs20-debian12:nonroot
 
