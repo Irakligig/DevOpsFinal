@@ -1,23 +1,20 @@
-FROM node:20-slim
+FROM node:20-slim AS build
 
 WORKDIR /app
-
-RUN apt-get update && \
-    apt-get upgrade -y --no-install-recommends && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN groupadd -r appgroup && useradd -r -g appgroup appuser
 
 COPY package*.json ./
 RUN npm ci --omit=dev
 
 COPY app.js ./
 
-USER appuser
+FROM gcr.io/distroless/nodejs20-debian12:nonroot
+
+WORKDIR /app
+COPY --from=build --chown=nonroot:nonroot /app /app
 
 EXPOSE 3000
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD node -e "fetch('http://localhost:3000/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+  CMD ["/nodejs/bin/node", "-e", "fetch('http://127.0.0.1:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
 
-CMD ["node", "app.js"]
+CMD ["app.js"]

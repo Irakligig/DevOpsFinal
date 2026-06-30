@@ -1,0 +1,2 @@
+# Trivy image scans focus on application dependencies (--pkg-types library).
+# Base OS packages are patched via apt-get upgrade in Dockerfiles.
